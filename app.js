@@ -36,18 +36,24 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "name",
                     message: "What is the name of the manager you are adding?",
+                    validate:  function (input)  {
+                        return input !== "" ? true : "The name field cannot be blank"                        
+                    }
                 },
                 {
                     type: "input",
                     name: "id",
                     message: "What is their ID number?",
+                    validate:  function (input)  {
+                        return !isNaN(input) ? true : "Please enter a number ID"                        
+                    }
                 },
                 {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
-                    validate:  function validateEmail (input)  {
-                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    validate:  function (input) {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : "Please enter a valid email"                        
                     }  
                 },
                 {
@@ -75,13 +81,16 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "id",
                     message: "What is their ID number?",
+                    validate:  function (input)  {
+                        return !isNaN(input) ? true : "Please enter a number ID"                        
+                    }
                 },
                 {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
-                    validate:  function validateEmail (input)  {
-                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    validate:  function (input) {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : "Please enter a valid email"                        
                     }
                 },
                 {
@@ -109,13 +118,16 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "id",
                     message: "What is their ID number?",
+                    validate:  function (input)  {
+                        return !isNaN(input) ? true : "Please enter a number ID"                        
+                    }
                 },
                 {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
-                    validate:  function validateEmail (input)  {
-                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    validate:  function (input) {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : "Please enter a valid email"                        
                     }
                 },
                 {
@@ -140,10 +152,15 @@ async function teamMemberInfo() {
 
 async function newMemberClass() {
 
+    
+
     const answers = await teamMemberInfo()
 
+    const firstCharCapped = answers.name.charAt(0).toUpperCase();
+    const nameCapitalized = firstCharCapped + answers.name.substring(1)
+
     if (answers.officeNumber) {
-        const newMember = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+        const newMember = new Manager(nameCapitalized, answers.id, answers.email, answers.officeNumber);
         employees.push(newMember);
     }
     else if (answers.github) {
