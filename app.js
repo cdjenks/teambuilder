@@ -12,14 +12,13 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 function promptUser() {
     return inquirer.prompt([
         {
             type: "list",
             name: "role",
             message:
-              "What is the role of the employee you are adding?",
+              "What is the role of the employee you are adding to your team?",
             choices: ["Manager", "Engineer", "Intern"],
           },
     ]);
@@ -36,7 +35,7 @@ async function teamMemberInfo() {
                 {
                     type: "input",
                     name: "name",
-                    message: "What is the name of the manager you are adding to your team?",
+                    message: "What is the name of the manager you are adding?",
                 },
                 {
                     type: "input",
@@ -47,12 +46,15 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
+                    validate:  function validateEmail (input)  {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    }  
                 },
                 {
                     type: "input",
                     name: "officeNumber",
                     message: "What is his/her office number?",
-                    default: "Office number not available"
+                    default: "Default: N/A",
                 },
                 {
                     type: "confirm",
@@ -67,7 +69,7 @@ async function teamMemberInfo() {
                 {
                     type: "input",
                     name: "name",
-                    message: "What is the name of the engineer you are adding to your team?",
+                    message: "What is the name of the engineer you are adding?",
                 },
                 {
                     type: "input",
@@ -78,12 +80,15 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
+                    validate:  function validateEmail (input)  {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    }
                 },
                 {
                     type: "input",
                     name: "github",
                     message: "What is his/her GitHub username?",
-                    default: "GitHub username not available"
+                    default: "Default: N/A",
                 },
                 {
                     type: "confirm",
@@ -98,7 +103,7 @@ async function teamMemberInfo() {
                 {
                     type: "input",
                     name: "name",
-                    message: "What is the name of the intern you are adding to your team?",
+                    message: "What is the name of the intern you are adding?",
                 },
                 {
                     type: "input",
@@ -109,12 +114,15 @@ async function teamMemberInfo() {
                     type: "input",
                     name: "email",
                     message: "What is his/her email address?",
+                    validate:  function validateEmail (input)  {
+                        return input.match(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/) ? true : 'Please enter a valid email'                        
+                    }
                 },
                 {
                     type: "input",
                     name: "school",
                     message: "What school are they enrolled in?",
-                    default: "School name not available"
+                    default: "Default: N/A",
                 },
                 {
                     type: "confirm",
@@ -132,59 +140,30 @@ async function teamMemberInfo() {
 
 async function newMemberClass() {
 
-    
-
     const answers = await teamMemberInfo()
 
     if (answers.officeNumber) {
         const newMember = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
-        employees.push(newMember)
+        employees.push(newMember);
     }
     else if (answers.github) {
         const newMember = new Engineer(answers.name, answers.id, answers.email, answers.github);
-        employees.push(newMember)
+        employees.push(newMember);
     }
     else {
         const newMember = new Intern(answers.name, answers.id, answers.email, answers.school);
-        employees.push(newMember)
+        employees.push(newMember);
     }
-
-    console.log(employees)
 
     if (answers.addAnother === true) {
         newMemberClass()
     }
     else {
-        render(employees)
-        console.log("done")
+        const teamHTML = render(employees)
+        fs.writeFileSync(outputPath, teamHTML)
     }
 
 }
 
-
 newMemberClass()
 
-// promptUser()
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
