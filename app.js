@@ -164,11 +164,11 @@ async function newMemberClass() {
         employees.push(newMember);
     }
     else if (answers.github) {
-        const newMember = new Engineer(answers.name, answers.id, answers.email, answers.github);
+        const newMember = new Engineer(nameCapitalized, answers.id, answers.email, answers.github);
         employees.push(newMember);
     }
     else {
-        const newMember = new Intern(answers.name, answers.id, answers.email, answers.school);
+        const newMember = new Intern(nameCapitalized, answers.id, answers.email, answers.school);
         employees.push(newMember);
     }
 
